@@ -22,7 +22,7 @@ services:
     container_name: 'redis-sentinel'
     image: redis
     ports:
-      - "26370:26379"
+      - "26379:26379"
     command: "redis-server /etc/sentinel.conf --sentinel"
     volumes:
       - "./sentinel.conf:/etc/sentinel.conf"
