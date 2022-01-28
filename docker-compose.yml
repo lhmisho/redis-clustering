@@ -18,4 +18,12 @@ services:
     volumes:
       - "./data/slave:/data/"
       - "./slave.conf:/etc/redis.conf"
+  redis-sentinel:
+    container_name: 'redis-sentinel'
+    image: redis
+    ports:
+      - "26370:26379"
+    command: "redis-server /etc/sentinel.conf --sentinel"
+    volumes:
+      - "./sentinel.conf:/etc/sentinel.conf"
   
