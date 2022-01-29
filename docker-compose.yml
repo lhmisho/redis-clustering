@@ -1,7 +1,7 @@
 version: '3'
-networks:
-  app-tier:
-    driver: bridge
+# networks:
+#   app-tier:
+#     driver: bridge
 
 services:
   redis-master:
@@ -13,31 +13,36 @@ services:
     volumes:
       - "./data/master:/data/"
       - "./master.conf:/etc/redis.conf"
-    networks:
-      - app-tier
+    # networks:
+    #   - app-tier
   redis-slave:
     container_name: 'redis-slave'
     image: redis
     ports:
       - "6370:6379"
     command: "redis-server /etc/redis.conf"
+    links:
+      - master:redis-master
     volumes:
       - "./data/slave:/data/"
       - "./slave.conf:/etc/redis.conf"
-    networks:
-      - app-tier
+    # networks:
+    #   - app-tier
   redis-sentinel:
     container_name: 'redis-sentinel'
     image: redis
     ports:
       - "26379:26379"
     command: "redis-sentinel /etc/sentinel.conf --sentinel"
+    links:
+      - master:redis-master
+      - redis-slave
     volumes:
       - "./sentinel.conf:/etc/sentinel.conf"
-    networks:
-      - app-tier
+    # networks:
+    #   - app-tier
   
-    depends_on:
-      - redis-master
-      - redis-slave
+    # depends_on:
+    #   - redis-master
+    #   - redis-slave
     
